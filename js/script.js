@@ -32,7 +32,6 @@ const   reklamaImg = document.querySelectorAll('.promo__adv img'),
         list  = document.querySelector('.promo__interactive-list'),
         form = document.querySelector('.add'),
         inputFilm = form.querySelector('.adding__input'),
-        deleteFilm = document.querySelectorAll('.delete'),
         inputCheck = form.querySelector('input[type=checkbox]');
 
 reklamaImg.forEach(item => item.remove());
@@ -53,6 +52,13 @@ function movieDBAdd() {
             </li>
         `;
     });
+    document.querySelectorAll('.delete').forEach( (elem, i) => {
+        elem.addEventListener('click', () => {
+            elem.parentElement.remove();
+            movieDB.movies.splice(i, 1);
+            movieDBAdd();
+        });
+    });
 }
 
 movieDBAdd();
@@ -60,21 +66,17 @@ movieDBAdd();
 form.addEventListener('submit', (event) => {
     event.preventDefault();
     let nameAddFilm = inputFilm.value;
-    if (nameAddFilm.length > 21) {
-        nameAddFilm = nameAddFilm.substring(0 , 21);
-        nameAddFilm += '...';
-    }
-    if (nameAddFilm.length > 0) {
+    if (nameAddFilm) {
+        if (nameAddFilm.length > 21) {
+            nameAddFilm = `${nameAddFilm.substring(0 , 21)}...`;
+        }
+        if (inputCheck.checked) {
+            console.log(`Добавляем любимый фильм - ${nameAddFilm}`);
+        }
         movieDB.movies.push(nameAddFilm);
     }
-
-    if (inputCheck.checked && nameAddFilm.length > 0) {
-        console.log(`Добавляем любимый фильм - ${nameAddFilm}`);
-    }
-    form.reset();
     movieDBAdd();
+    form.reset();
 });
 
-deleteFilm.forEach( elem => {
-    elem.addEventListener('click', () => console.log('h!'))
-});
+
